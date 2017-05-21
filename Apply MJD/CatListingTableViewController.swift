@@ -63,11 +63,28 @@ class CatListingTableViewController: UITableViewController {
         cell.tag = currentTag
         cell.catName.text = data[indexPath.row].name ?? "Mystery cat!"
         cell.caption.text = data[indexPath.row].caption ?? ""
-        if let catImage = data[indexPath.row].image { cell.catImage.image = catImage }
+        
+        if let catImage = data[indexPath.row].image {
+            cell.catImage.image = catImage
+        } else {
+            if let urlString = data[indexPath.row].imageURL, let urlForImage = URL(string: urlString) {
+                APIClient.loadImage(url: urlForImage, completion: { (maybeImage, maybeError) in
+                    guard maybeError == nil else {
+                        // handle error
+                        print(maybeError?.description as Any)
+                        return
+                    }
 
-        cell.setNeedsLayout()
-        cell.layoutIfNeeded()
-
+                    if let imageForCat = maybeImage {
+                        cell.catImage.image = imageForCat
+                        self.data[indexPath.row].image = imageForCat
+                    }
+                })
+            }
+        }
+        
         return cell
     }
+    
+    
 }

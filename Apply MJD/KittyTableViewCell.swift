@@ -14,4 +14,9 @@ class KittyTableViewCell: UITableViewCell {
     @IBOutlet weak var catName: UILabel!
     @IBOutlet weak var caption: UILabel!
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.catImage.image = UIImage(named: "placeholder")
+    }
 }
