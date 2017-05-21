@@ -24,7 +24,7 @@ class DataManagerTests: XCTestCase {
 
         APIClient.getCats(){ (cats, error) in
 
-            XCTAssertNil(error, "Error: \(error?.description)")
+            XCTAssertNil(error, "Error: \(String(describing: error?.description))")
 
             guard cats != nil else {
                 XCTAssert(false, "🙀 Problem - no cats!")

@@ -9,18 +9,49 @@
 import Foundation
 
 
-public typealias Data = [String: Any]
+public typealias ModelData = [String: Any]
 
 public protocol Model {
-    init?(data: Data)
+    init?(data: ModelData)
 }
 
 
-public struct Cat: Model {
+public class Cat: Model {
 
-    public init?(data: Data) {
+    public let caption: String?
+    internal let imageURL: String?
+    public let name: String?
+    internal let source: String?
+    public var image: UIImage?
+
+    public required init?(data: ModelData) {
         guard !data.isEmpty else {
             return nil
         }
+
+        caption = data["caption"] as? String ?? nil
+        imageURL = data["image"] as? String ?? nil
+        name = data["name"] as? String ?? nil
+        source = data["source"] as? String ?? nil
+
+        if let urlString = imageURL, let urlForImage = URL(string: urlString) {
+            APIClient.loadImage(url: urlForImage, completion: { (maybeImage, maybeError) in
+                guard maybeError == nil else {
+                    // handle error
+                    print(maybeError?.description as Any)
+                    return
+                }
+
+                if let imageForCat = maybeImage {
+                    self.image = imageForCat
+                } else {
+                    self.image = nil
+                }
+
+            })
+        } else {
+            image = nil
+        }
+
     }
 }

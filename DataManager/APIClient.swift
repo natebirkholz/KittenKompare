@@ -19,7 +19,7 @@ public enum NetworkErrorType: Error {
     case serverOffline
     case invalidRequest
 
-    var description: String {
+    public var description: String {
         switch self {
         case .noConnection:
             return "No Internet Connection"
@@ -76,7 +76,7 @@ public struct APIClient {
 
         doRequest(request) { (json, error) in
 
-                guard let json = json as? [String: [Data]] else {
+                guard let json = json as? [String: [ModelData]] else {
                     completion(nil, error)
                     return
                 }
@@ -105,7 +105,7 @@ public struct APIClient {
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request) { (data, response, error) -> Void in
 
-            if let error = error as? NSError {
+            if let error = error as NSError? {
                 if error.code == NSURLErrorNotConnectedToInternet {
                     completion(nil, .noConnection)
                 } else {
@@ -130,7 +130,6 @@ public struct APIClient {
 
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-
                     completion(json as Any?, nil)
 
                 } catch {
