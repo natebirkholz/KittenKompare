@@ -8,3 +8,4 @@
 6. Thanks! This was fun!
 
 note: See https://github.com/natebirkholz/WeatherWonder for a similar project I created from scratch.
+note: See https://github.com/natebirkholz/mjdpusher for the pythin script I used to submit my application.
