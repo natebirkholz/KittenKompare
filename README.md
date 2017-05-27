@@ -9,4 +9,6 @@
 
 note: See https://github.com/natebirkholz/WeatherWonder for a similar project I created from scratch.
 
+note: See https://github.com/natebirkholz/Artmospherez for a much larger project built on WeatherWonder as a foundation and submitted to Apple for the App Store
+
 note: See https://github.com/natebirkholz/mjdpusher for the Python script I used to submit my application.
