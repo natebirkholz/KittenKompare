@@ -13,7 +13,7 @@ class CatListingTableViewController: UITableViewController {
 
     fileprivate let kittyCell = "kittyCell"
 
-    @IBOutlet var tableVIew: UITableView!
+    @IBOutlet var table: UITableView!
     
     var data: [Cat] = []
 
@@ -31,17 +31,17 @@ class CatListingTableViewController: UITableViewController {
 
             if let cats = maybeCats {
                 for cat in cats { self.data.append(cat) }
-                self.tableVIew.reloadData()
+                self.table.reloadData()
                 // Was trying to set itself offscreen slightly, fixed by adding 1
-                let topPoint = CGPoint(x: 0, y: 0 - self.tableVIew.contentInset.top + 1)
-                self.tableVIew.setContentOffset(topPoint, animated: true)
+                let topPoint = CGPoint(x: 0, y: 0 - self.table.contentInset.top + 1)
+                self.table.setContentOffset(topPoint, animated: true)
             }
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableVIew.reloadData()
+        table.reloadData()
     }
 
     // MARK: - Table view data source
@@ -57,7 +57,7 @@ class CatListingTableViewController: UITableViewController {
 
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: kittyCell, for: indexPath) as! KittyTableViewCell
+        let cell = table.dequeueReusableCell(withIdentifier: kittyCell, for: indexPath) as! KittyTableViewCell
 
         let currentTag = cell.tag + 1
         cell.tag = currentTag
@@ -68,7 +68,7 @@ class CatListingTableViewController: UITableViewController {
             cell.catImage.image = catImage
         } else {
             if let urlString = data[indexPath.row].imageURL, let urlForImage = URL(string: urlString) {
-                APIClient.loadImage(url: urlForImage, completion: { (maybeImage, maybeError) in
+                APIClient.loadImage(url: urlForImage, completion: { [weak self] (maybeImage, maybeError) in
                     guard maybeError == nil else {
                         // handle error
                         print(maybeError?.description as Any)
@@ -77,7 +77,7 @@ class CatListingTableViewController: UITableViewController {
 
                     if let imageForCat = maybeImage {
                         cell.catImage.image = imageForCat
-                        self.data[indexPath.row].image = imageForCat
+                        self?.data[indexPath.row].image = imageForCat
                     }
                 })
             }
