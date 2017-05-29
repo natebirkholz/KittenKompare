@@ -55,7 +55,6 @@ class CatListingTableViewController: UITableViewController {
         return data.count
     }
 
-
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = table.dequeueReusableCell(withIdentifier: kittyCell, for: indexPath) as! KittyTableViewCell
 
@@ -85,6 +84,4 @@ class CatListingTableViewController: UITableViewController {
         
         return cell
     }
-    
-    
 }
