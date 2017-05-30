@@ -22,7 +22,7 @@ class CatListingTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        APIClient.getCats { (maybeCats, maybeError) in
+        APIClient.getCats { [weak self] (maybeCats, maybeError) in
             guard maybeError == nil else {
                 //handle error
                 print(maybeError?.description as Any)
@@ -30,11 +30,13 @@ class CatListingTableViewController: UITableViewController {
             }
 
             if let cats = maybeCats {
-                for cat in cats { self.data.append(cat) }
-                self.table.reloadData()
+                for cat in cats { self?.data.append(cat) }
+                self?.table.reloadData()
                 // Was trying to set itself offscreen slightly, fixed by adding 1
-                let topPoint = CGPoint(x: 0, y: 0 - self.table.contentInset.top + 1)
-                self.table.setContentOffset(topPoint, animated: true)
+                if let top = self?.table.contentInset.top {
+                    let topPoint = CGPoint(x: 0, y: 0 - top + 1)
+                    self?.table.setContentOffset(topPoint, animated: true)
+                }
             }
         }
     }
